@@ -1,0 +1,35 @@
+_ > nanoagent.plugin.v0001.ManifestConfig:
+id: puzzle-solver
+name: Puzzle Solver
+version: 0.1.0
+status: ready
+spec: nanoagent.plugin/v0001
+
+runtime > nanoagent.plugin.v0001.RuntimeConfig:
+  type: mcp_stdio
+  command: [uv, run, --frozen, python, -m, plugin]
+
+permissions > nanoagent.plugin.v0001.PermissionsConfig:
+  network > nanoagent.plugin.v0001.NetworkConfig:
+    hosts: []
+  filesystem > nanoagent.plugin.v0001.FilesystemConfig:
+    write: [workspace]
+
+# One entry per contract.Tool; its input and output classes are contract.TOOLS's.
+tools > dict[contract.Tool, nanoagent.plugin.v0001.ToolConfig]:
+  view_puzzle:
+    description: Read a picture with a hole and its candidate pieces into lists of cells, save them as puzzle.json, and state the question
+  find_fits:
+    description: Find every piece that fills the hole exactly as drawn; the task's pinned reference
+
+# One entry per contract.Task; its input class is contract.TASKS's.
+tasks > dict[contract.Task, nanoagent.plugin.v0001.TaskConfig]:
+  find-the-piece:
+    description: Find the piece that fills the hole in a picture exactly, as drawn
+    runner: agent
+    tools: [view_puzzle]
+    reference: find_fits
+    instructions: |-
+      Call view_puzzle once with the task input exactly as given. It returns the question, the hole's cells as [row, column] in the picture, and each piece's cells as [row, column], already moved so its top row and its left column are 0. Rows grow downward and columns to the right.
+      Pieces are placed exactly as drawn: they may be moved, but never turned or flipped. Move the hole's cells the same way, so its top row and left column are 0. A piece fills the hole when its cells are then exactly the hole's cells, with no cell missing and none extra.
+      Submit the label of the piece that fills the hole. If more than one does, submit any one.

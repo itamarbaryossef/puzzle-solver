@@ -1,0 +1,11 @@
+_ > nanoagent.plugin.v0001.ProductConfig:
+tagline: "Find the Missing Piece"
+summary: "Puzzle Solver shows a picture with a hole cut out and a few candidate pieces, each drawn in '#' and '.'. The agent must say which piece fills the hole exactly as drawn, without turning or flipping it. The verifier tries the answer on the puzzle itself, so any correct answer passes."
+highlights:
+  - "Matching shapes, a classic test of visual reasoning, on pictures given as text"
+  - "Bring your own puzzle: the input is the picture and the pieces, checked before the agent starts"
+  - "Built-in traps: pieces that fit only if turned or flipped, and pieces one cell too big or too small"
+steps:
+  - "Paste a picture with a hole and two to four pieces, drawn in # and ."
+  - "The agent reads the hole and the pieces, compares their shapes and submits a piece"
+  - "The verifier places that piece in the hole and shows its verdict"
